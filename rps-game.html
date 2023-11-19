@@ -7,12 +7,14 @@
     <title>Rock Paper Scissors</title>
 </head>
 <body>
+    <!-- Create Rock, Paper, Scissors game with score tracker-->
     <header>
         <div>
             <h1>Rock Paper Scissors</h1>
         </div>
     </header>
     <body>
+        <!-- Create buttons for each option plus a button to reset score -->
         <div>
             <button onclick="
             playGame('rock');
@@ -25,9 +27,20 @@
             <button onclick="
             playGame('scissors');
             ">Scissors</button>
+
+            <button onclick="
+            score.wins = 0;
+            score.losses = 0;
+            score.ties = 0;
+            ">Reset Score</button>
+        </div>
+        <!-- div to display score -->
+        <div>
+            <p>Current score: </p>
         </div>
 
       <script>
+        // Functions to generate random number for computer and show result based on user and computer choice
         function pickComputerMove () {
             const randomNum = Math.random();
 
@@ -72,8 +85,25 @@
                 }
             };
 
-            alert(`You picked ${playerMove}. Computer picked ${computerMove}. ${result}`);
+            if (result === `You win!`) {
+                score.wins = score.wins + 1;
+            } else if (result === `You lose!`) {
+                score.losses = score.losses + 1;
+            } else if (result === `It's a tie!`) {
+                score.ties += 1;
+            }
+            // score.ties += 1 IS A SHORTCUT FOR score.ties = score.ties + 1
+
+            // Put results in local storage
+            // Must use JSON.stringify to convert our score object to a string because localStorage only supports strings
+            localStorage.setItem('score', JSON.stringify(score));
+
+            alert(`You picked ${playerMove}. Computer picked ${computerMove}. ${result} Wins: ${score.wins}, Losses: ${score.losses}, Ties: ${score.ties}`);
         }
+
+        // Function for score tracker
+        // Put JSON string back into an object
+        const score = JSON.parse(localStorage.getItem('score'));
 
       </script>
     </body>
