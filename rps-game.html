@@ -32,11 +32,16 @@
             score.wins = 0;
             score.losses = 0;
             score.ties = 0;
+            // Remove score from localStorage to properly reset
+            localStorage.removeItem('score');
+            // Updates score on page
+            updateScoreElement();
             ">Reset Score</button>
         </div>
+
         <!-- div to display score -->
         <div>
-            <p>Current score: </p>
+            <p class="game-score">Current score: </p>
         </div>
         <footer>
             <p>JavaScript Practice Page</p>
@@ -56,6 +61,11 @@
             }   
             return computerMove;
         }
+
+        // Update score on page
+        function updateScoreElement() {
+            document.querySelector('.game-score').innerHTML = `Wins: ${score.wins}, Losses: ${score.losses}, Ties: ${score.ties}`;
+        };
 
         function playGame(playerMove) {
             const computerMove = pickComputerMove();
@@ -101,12 +111,26 @@
             // Must use JSON.stringify to convert our score object to a string because localStorage only supports strings
             localStorage.setItem('score', JSON.stringify(score));
 
-            alert(`You picked ${playerMove}. Computer picked ${computerMove}. ${result} Wins: ${score.wins}, Losses: ${score.losses}, Ties: ${score.ties}`);
+            updateScoreElement();
+
+            alert(`You picked ${playerMove}. Computer picked ${computerMove}. ${result}`);
         }
 
         // Function for score tracker
         // Put JSON string back into an object
-        const score = JSON.parse(localStorage.getItem('score'));
+        let score = JSON.parse(localStorage.getItem('score'));
+
+        // Error occurs from localStorage.removeItem (in reset button) and score is NULL so we use if statement to give it a default value of 0
+        // Make sure to change CONST score to LET score above 
+        if (score === null) {
+            score = {
+                wins: 0,
+                losses: 0,
+                ties: 0
+            }
+        };
+
+        updateScoreElement();
 
       </script>
     </body>
